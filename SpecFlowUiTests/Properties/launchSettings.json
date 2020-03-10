@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "UiTest": {
+      "commandName": "Project",
+      "commandLineArgs": "env"
+    }
+  }
+}
