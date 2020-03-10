@@ -1,5 +1,7 @@
 # NAIT UI automation suite.
 
+![.NET Core](https://github.com/SamuelGarrattIqa/coypu_specflow/workflows/.NET%20Core/badge.svg)
+
 This designed as an base for creating a UI test using SpecFlow and Coypu.
 
 This project uses C# to drive UI and automation tests to verify that NAIT is working as expected.
