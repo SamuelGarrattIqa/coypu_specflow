@@ -26,7 +26,7 @@ namespace SpecFlowUiTests.StepDefinitions
         [Then("a result is returned")]
         public void ThenAResultIsReturned()
         {
-            ScenarioCommon.Browser.FindXPath("//div[@id='content-area']//a", new Options { Match = Match.First }).Click();
+            ScenarioCommon.Browser.FindXPath("//h2/a", new Options { Match = Match.First }).Click();
             Thread.Sleep(500);
         }
     }

@@ -29,8 +29,8 @@ namespace SpecFlowUiTests.StepDefinitions
         [Given("I am on the IntegrationQA blog page")]
         public void GivenIAmOnIQAPage()
         {
-            ScenarioCommon.Setup(testContext);    
             ScenarioCommon.Browser.Visit("https://integrationqa.com/blog/");
+            //ScenarioCommon.Browser.Visit("http://localhost:4999");
         }
 
         [When("I search for '(.*)'")]

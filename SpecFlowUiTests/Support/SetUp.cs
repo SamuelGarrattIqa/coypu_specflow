@@ -14,62 +14,55 @@ namespace Hooks
 {
   [Binding]
   public class SetUp
-  {
-    //private readonly IObjectContainer _objectContainer;
-    //private BrowserSession _browser;
+  {    
+    private readonly ScenarioContext scenarioContext;
 
-    //private readonly TestContext _testContext;
+    private ScenarioCommon scenarioCommon;
 
-    public SetUp()
+    private TestContext testContext;
+
+    public SetUp(ScenarioContext scenarioContext, ScenarioCommon scenarioCommon, TestContext testContext)
     {
-      //_objectContainer = objectContainer;
-      //_testContext = testContext;      
+          this.scenarioCommon = scenarioCommon;
+          this.scenarioContext = scenarioContext;
+          this.testContext = testContext;
     }
 
-    [BeforeScenario("UI")]
+    [BeforeScenario]
     public void BeforeUI()
     {
-      /*
-      var sessionConfiguration = new SessionConfiguration
-      {
-        Driver = typeof(SeleniumWebDriver)
-      };
-      string browser = _testContext.Properties["browser"] as string;
-      if (string.IsNullOrWhiteSpace(browser))
-      {
-          browser = "chrome";
-      }
-      sessionConfiguration.Browser = browser switch
-      {
-        "safari" => Coypu.Drivers.Browser.Safari,
-
-        "chrome" => Coypu.Drivers.Browser.Chrome,
-
-        _ => Coypu.Drivers.Browser.Chrome,
-      };
-      sessionConfiguration.Timeout = TimeSpan.FromSeconds(15);
-      sessionConfiguration.RetryInterval = TimeSpan.FromSeconds(1);      
-      _browser = new BrowserSession(sessionConfiguration);
-      _objectContainer.RegisterInstanceAs(_browser);
-      _browser.MaximiseWindow();      
-      //ScenarioCommon.Browser = _browser;
-      */
+      scenarioCommon.Setup(testContext);          
     }    
 
-    [AfterScenario("UI")]
+    [AfterScenario]
     public void AfterUI()
     {
       /*
-      if (_testContext.CurrentTestOutcome != UnitTestOutcome.Passed)
-      {
-        var seperator = GetInformation.separator;
-        var path = $"{GetInformation.projectDirectory}{seperator}TestResults{seperator}{_testContext.TestName}.png";
-        _browser.SaveScreenshot(path);
-        _testContext.AddResultFile(path);
+      if (scenarioCommon.HasBrowser != null)
+      {        
+        if (testContext.CurrentTestOutcome != UnitTestOutcome.Passed)
+        {
+          var seperator = GetInformation.separator;
+          var path = $"{GetInformation.projectDirectory}{seperator}TestResults{seperator}{testContext.TestName}.png";
+          scenarioCommon.Browser.SaveScreenshot(path);
+          testContext.AddResultFile(path);
+          ReportStatus("False");
+        }
+        else
+        {
+          ReportStatus("True");
+        }
       }
-      _browser.Dispose();
-      ScenarioCommon.Browser = null;
       */
+    }
+
+    private void ReportStatus(string status)
+    {
+      if (scenarioCommon.DemoMode == true)
+      {
+        var cookies = scenarioCommon.Browser.Driver.Cookies;
+        cookies.AddCookie(new OpenQA.Selenium.Cookie("zaleniumTestPassed", status));
+      }
     }
   }
 }

@@ -16,6 +16,16 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
-    - name: Build with dotnet
+        dotnet-version: 3.1.101   
+    - name: Zalenium Server Recording UI # Using https://github.com/marketplace/actions/zalenium-server
+      uses: ajinx/zalenium@1.1
+    - name: Build project
       run: dotnet build --configuration Release
+    - name: Run tests      
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: Zalenium recording
+        # Directory containing files to upload
+        path: /tmp/videos

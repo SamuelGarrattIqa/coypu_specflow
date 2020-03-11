@@ -1,9 +1,11 @@
 using Coypu;
 using Coypu.Drivers.Selenium;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SpecFlowUiTests.Support;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TechTalk.SpecFlow;
 
 namespace UiTest.Lib
 {
@@ -13,16 +15,48 @@ namespace UiTest.Lib
   /// </summary>
   public class ScenarioCommon : IDisposable
   {
-    public BrowserSession Browser { get; set; }
+    //public BrowserSession Browser { get; set; }
 
     public void Dispose()
     {
       if (Browser != null) Browser.Dispose();
     }
 
-    public void Setup(TestContext testContext)
+    private SessionConfiguration sessionConfiguration;
+
+    public bool? HasBrowser { get; set; }
+
+    /// <summary>
+    /// Whether tests are running in demo mode
+    /// </summary>
+    public bool DemoMode { get; set; }
+
+    private BrowserSession browser;
+    public BrowserSession Browser
     {
-      var sessionConfiguration = new SessionConfiguration
+      get
+      {
+        if (browser == null)
+        {
+          var width = 1920;
+          var height = 1080;
+          var chromedriver = new CustomChromeDriver(width, height, DemoMode);
+          browser = new BrowserSession(sessionConfiguration, chromedriver);
+          HasBrowser = true;
+          Browser.ResizeTo(width, height);
+          if (DemoMode == true)
+          {
+            //var cookies = Browser.Driver.Cookies;
+            //cookies.AddCookie(new OpenQA.Selenium.Cookie("zaleniumMessage", scenarioContext.ScenarioInfo.Title));
+          }
+        }
+        return browser;
+      }
+    }
+
+    public void Setup(TestContext testContext) //, ScenarioContext scenarioContext)
+    {
+      sessionConfiguration = new SessionConfiguration
       {
         Driver = typeof(SeleniumWebDriver)
       };
@@ -41,7 +75,8 @@ namespace UiTest.Lib
       };
       sessionConfiguration.Timeout = TimeSpan.FromSeconds(15);
       sessionConfiguration.RetryInterval = TimeSpan.FromSeconds(1);   
-      Browser = new BrowserSession(sessionConfiguration);
+      DemoMode = true;
+      //Browser = new BrowserSession(sessionConfiguration);
     }
   }
 }
